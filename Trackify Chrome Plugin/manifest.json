@@ -1,0 +1,16 @@
+{
+  "name": "Trackify",
+  "version": "1.0",
+  "manifest_version": 2,
+  "author":"Nikhil Bharadwaj",
+  "description": "Get pages source from a popup",
+  "browser_action": {
+    "default_icon": "candidate.png",
+    "default_popup": "index.html"
+  },
+  "permissions": ["tabs", "<all_urls>"],
+  "content_scripts": [ {
+    "js": [ "libs/jquery.min.js"],
+    "matches": [ "http://*/*", "https://*/*"]
+  }]
+}
