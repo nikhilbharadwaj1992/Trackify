@@ -3,11 +3,16 @@
   <head>
       <script src="libs/jquery.min.js"></script>
 	    <link rel="stylesheet" href="libs/bootstrap.min.css">
+      <link rel="stylesheet" href="libs/select2.css">    
+      <link rel="stylesheet" href="libs/selectize.default.css">
+    
       <script src="libs/bootstrap.min.js"></script>
-      <script src="libs/angular.min.js"></script>
+      <!--<script src="libs/angular.min.js"></script>-->
+      <script src="libs/angular.js"></script>
+      <script src="libs/angular-sanitize.js"></script>
+      <script src="libs/select.js"></script>
       <script src="app.js"></script>
       <script src="controller.js"></script>
-      <script src="service.js"></script>
       <script src='popup.js'></script>
   </head>
   <style>
@@ -44,15 +49,23 @@ padding-top: 2px;
 
  .btn{
  height:25px;
-
-
  }
+
+ .ui-select-dropdown {
+   top: 0px !important;
+   width: 90%;
+ }
+
+ .ui-select-container{
+      min-width: 200px !important;
+ }
+
 	
 </style>
 
   <body>
   
-      <div ng-app="naukriplugin" ng-controller="naukripluginctrl" class="mydiv">
+      <div ng-app="naukriplugin" ng-controller="naukripluginctrl as ctrl" class="mydiv">
 	<nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -71,17 +84,27 @@ padding-top: 2px;
 	<div class="mydiv1">
 	  
       Save to : <br>
+      <br>
 	  <div class="form-group">
-                    
-                    <div class="col-sm-10">
-                      <select class="select" ng-model="selectedCollection">
-                        <option ng-repeat="collection in collections" value="{{collection._id}}">{{collection._id}}</option>
-                      </select>
+
+
+
+      <!--<div ng-bind-html="item.primarySkill | highlight: $select.search"></div>                    -->
+                    <div class="col-sm-6">
+                      <!--ng-model="collections.selected" -->
+                      <ui-select ng-model="ctrl.collections.selected" theme="select2" ng-disabled="ctrl.disabled" style="min-width: 300px;" title="Choose a Job">
+    <ui-select-match placeholder="Select a job">{{$select.selected._id + "-" + $select.selected.clientName + "-" + $select.selected.primarySkill}}</ui-select-match>
+    <ui-select-choices repeat="item in ctrl.collections | propsFilter: {_id: $select.search, clientName: $select.search, primarySkill: $select.search}">
+      <div ng-bind-html="item._id | highlight: $select.search"></div>
+      <div ng-bind-html="item.clientName | highlight: $select.search"></div>
+      <div ng-bind-html="item.primarySkill | highlight: $select.search"></div>
+    </ui-select-choices>
+  </ui-select>
                     </div>
       <br>
        <div class="row">
                     <div class="col-sm-4 col-sm-offset-4">
-                      <button class="btn btn-success btn-quirk  btn-sm btn-wide mr5" ng-click="addToCollection(selectedCollection)">SAVE</button>
+                      <button class="btn btn-success btn-quirk  btn-sm btn-wide mr5" ng-click="addToCollection(ctrl.collections.selected)">SAVE</button>
 					  </div>
         <div class="message" ng-if="message">
           <br>
