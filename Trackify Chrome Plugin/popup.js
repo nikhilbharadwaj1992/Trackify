@@ -8,7 +8,7 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
 
 function getCandidate(html) {
         var json = {};
-        json.name = $(html).find('.nameCont').find('.bkt4').text();
+        json.candidateName = $(html).find('.nameCont').find('.bkt4').text();
 
         var experience, current_ctc, location, preferred_location = "";
         if ($(html).find(".exp-sal-loc-box span:nth-child(1)")[0]) {
@@ -28,15 +28,17 @@ function getCandidate(html) {
         json.location = location;
         json.preferred_location = preferred_location;
 
-        json.current_role = $(html).find("label:contains('Current')").next().first().text();
+        json.employer = $(html).find("label:contains('Current')").next().first().text();
         json.previous_role = $(html).find("label:contains('Previous')").next().first().text();
-        json.highest_degree = $(html).find("label:contains('Highest Degree')").next().first().text();
-        json.notice_period = $(html).find("label:contains('Notice Period')").next().first().text();
+        json.college = $(html).find("label:contains('Highest Degree')").next().first().text();
+        json.noticePeriod = $(html).find("label:contains('Notice Period')").next().first().text();
         json.key_skills = $(html).find('.right-container').find('div').first().next().text()
                           .substring(0, $(html).find('.right-container').find('div').first().next().text().indexOf(' IT Skills Details'));
         json.may_also_know = $(html).find('.cl').text();
-        json.phone_no = $(html).find('.num').first().text();
-        json.email_id = $(html).find('.emailCont').first().text().replace(/\s\s+/g, '');
+        json.candidateContact = $(html).find('.num').first().text();
+        json.candidateEmail = $(html).find('.emailCont').first().text().replace(/\s\s+/g, '');
+        json.phone_no = json.candidateContact;
+        json.email_id = json.candidateEmail;
 
         var work_summary = {};
         work_summary.description = $(html).find('.content > .bkt4').first().text();
