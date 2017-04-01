@@ -12,7 +12,7 @@ function getCandidate(html) {
 
         var experience, current_ctc, location, preferred_location = "";
         if ($(html).find(".exp-sal-loc-box span:nth-child(1)")[0]) {
-            experience = $(html).find(".exp-sal-loc-box span:nth-child(1)")[0].innerText;
+            experience = $(html).find(".exp-sal-loc-box span:nth-child(1)")[0].innerText.replace('yr','.').replace('m','').replace(/ /g, '');
         }
         if ($(html).find(".exp-sal-loc-box span:nth-child(2)")[0]) {
             current_ctc = $(html).find(".exp-sal-loc-box span:nth-child(2)")[0].innerText;
@@ -35,12 +35,20 @@ function getCandidate(html) {
           json.employer = currentArray[1];
         }
         json.previous_role = $(html).find("label:contains('Previous')").next().first().text();
-        json.college = $(html).find("label:contains('Highest Degree')").next().first().text();
+        json.highest_degree = $(html).find("label:contains('Highest Degree')").next().first().text();
+        var degreeArray = json.highest_degree.split(' ');
+        json.degree = degreeArray[0];
+        if (degreeArray.length > 2) {
+          json.college = degreeArray[1] + ' ' + degreeArray[2];
+          if (degreeArray.length > 3) {
+            json.college = json.college + degreeArray[3];
+          }
+        }
         json.noticePeriod = $(html).find("label:contains('Notice Period')").next().first().text();
         json.key_skills = $(html).find('.right-container').find('div').first().next().text()
                           .substring(0, $(html).find('.right-container').find('div').first().next().text().indexOf(' IT Skills Details'));
         json.may_also_know = $(html).find('.cl').text();
-        json.candidateContact = $(html).find('.num').first().text();
+        json.candidateContact = $(html).find('.num').first().text().split(' ')[0];
         json.candidateEmail = $(html).find('.emailCont').first().text().replace(/\s\s+/g, '');
         json.phone_no = json.candidateContact;
         json.email_id = json.candidateEmail;
