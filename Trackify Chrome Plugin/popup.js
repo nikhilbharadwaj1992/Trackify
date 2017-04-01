@@ -28,7 +28,12 @@ function getCandidate(html) {
         json.location = location;
         json.preferred_location = preferred_location;
 
-        json.employer = $(html).find("label:contains('Current')").next().first().text();
+        json.current_role = $(html).find("label:contains('Current')").next().first().text();
+        var currentArray = json.current_role.split('at');
+        json.designation = currentArray[0];
+        if (currentArray.length > 1) {
+          json.employer = currentArray[1];
+        }
         json.previous_role = $(html).find("label:contains('Previous')").next().first().text();
         json.college = $(html).find("label:contains('Highest Degree')").next().first().text();
         json.noticePeriod = $(html).find("label:contains('Notice Period')").next().first().text();
