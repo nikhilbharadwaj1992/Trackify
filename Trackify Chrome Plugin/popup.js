@@ -38,12 +38,25 @@ function getCandidate(html) {
         json.highest_degree = $(html).find("label:contains('Highest Degree')").next().first().text();
         var degreeArray = json.highest_degree.split(' ');
         json.degree = degreeArray[0];
-        if (degreeArray.length > 2) {
-          json.college = degreeArray[1] + ' ' + degreeArray[2];
-          if (degreeArray.length > 3) {
-            json.college = json.college + degreeArray[3];
-          }
+        // if (degreeArray.length > 2) {
+        //   json.college = degreeArray[1] + ' ' + degreeArray[2];
+        //   if (degreeArray.length > 3) {
+        //     json.college = json.college + degreeArray[3];
+        //   }
+        // }
+        var college = '';
+        for (i = 1; i < degreeArray.length; i++) { 
+            if (isNaN(parseInt(degreeArray[i]))) {
+              if (college == '') {
+                college = degreeArray[i];
+              } else {
+                college = college + ' ' + degreeArray[i]
+              }
+            } else {
+              break;
+            }
         }
+        json.college = college;
         json.noticePeriod = $(html).find("label:contains('Notice Period')").next().first().text();
         json.key_skills = $(html).find('.right-container').find('div').first().next().text()
                           .substring(0, $(html).find('.right-container').find('div').first().next().text().indexOf(' IT Skills Details'));
