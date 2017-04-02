@@ -15,7 +15,7 @@ function getCandidate(html) {
             experience = $(html).find(".exp-sal-loc-box span:nth-child(1)")[0].innerText.replace('yr','.').replace('m','').replace(/ /g, '');
         }
         if ($(html).find(".exp-sal-loc-box span:nth-child(2)")[0]) {
-            current_ctc = $(html).find(".exp-sal-loc-box span:nth-child(2)")[0].innerText;
+            current_ctc = $(html).find(".exp-sal-loc-box span:nth-child(2)")[0].innerText.replace(/^ | $/g, '');
         }
         if ($(html).find(".exp-sal-loc-box span:nth-child(3)")[0]) {
             location = $(html).find(".exp-sal-loc-box span:nth-child(3)")[0].innerText;
@@ -24,7 +24,11 @@ function getCandidate(html) {
             preferred_location = $(html).find(".exp-sal-loc-box span:nth-child(4)")[0].innerText;
         }
         json.experience = experience;
+        var _currentctcArray = current_ctc.split(' ');
         json.current_ctc = current_ctc;
+        if (!(isNaN(parseFloat(_currentctcArray[0])))) {
+          json.current_ctc = parseFloat(_currentctcArray[0]);
+        }
         json.location = location;
         json.preferred_location = preferred_location;
 
@@ -57,7 +61,19 @@ function getCandidate(html) {
             }
         }
         json.college = college;
-        json.noticePeriod = $(html).find("label:contains('Notice Period')").next().first().text();
+        json.notice_period = $(html).find("label:contains('Notice Period')").next().first().text();
+        var _noticePeriod = json.notice_period.split(' ');
+        if (_noticePeriod.length > 1) {
+          if (isNaN(parseInt(_noticePeriod[0]))) {
+            json.noticePeriod = 0;
+          } else {
+            if (_noticePeriod[1] == 'Months') {
+              json.noticePeriod = parseInt(_noticePeriod[0]) * 30;
+            } else {
+              json.noticePeriod = parseInt(_noticePeriod[0]);
+            }
+          }
+        }
         json.key_skills = $(html).find('.right-container').find('div').first().next().text()
                           .substring(0, $(html).find('.right-container').find('div').first().next().text().indexOf(' IT Skills Details'));
         json.may_also_know = $(html).find('.cl').text();
