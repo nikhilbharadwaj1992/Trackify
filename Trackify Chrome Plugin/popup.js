@@ -29,6 +29,7 @@ function getCandidate(html) {
         if (!(isNaN(parseFloat(_currentctcArray[0])))) {
           json.current_ctc = parseFloat(_currentctcArray[0]);
         }
+        json.ctcFixed = json.current_ctc;
         json.location = location;
         json.preferred_location = preferred_location;
 
